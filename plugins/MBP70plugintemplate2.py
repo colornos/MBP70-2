@@ -1,4 +1,13 @@
-import http.client as http_client
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+import sys
+import logging
+from configparser import ConfigParser
+import os
+import threading
+import urllib3
+
+http = urllib3.PoolManager()
 
 class Plugin:
 
@@ -6,7 +15,7 @@ class Plugin:
         self.name = "MBP70plugintemplate2"
 
     def execute(self, config, temperature_data):
-        
+
         def read_from_file(filename):
             with open(filename, "r") as file:
                 contents = file.read()
@@ -18,13 +27,9 @@ class Plugin:
             print("No card detected!")
         else:
             temperature = temperature_data[0]["temperature"]
-            http_client.HTTPSConnection._http_vsn_str = "HTTP/1.0"
-            conn = http_client.HTTPSConnection("colornos.com")
             headers = {"Content-type": "application/x-www-form-urlencoded"}
 
-            data = f"rfid={rfid}&one={temperature}"
-            conn.request("POST", "/sensors/temperature.php", data, headers)
-            response = conn.getresponse()
+            data = f"rfid={rfid}&one={temperature}&pin={pin}"
+            response = http.request("POST", "https://colornos.com/sensors/temperature.php", body=data, headers=headers)
             print(response.status, response.reason)
-            print(response.read().decode())
-            conn.close()
+            print(response.data.decode())
