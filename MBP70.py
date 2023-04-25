@@ -12,53 +12,40 @@ import os
 Char_temperature = '00002A1C-0000-1000-8000-00805f9b34fb'  # temperature data
 
 def handle_temperature_data(handle, value):
-    temp_data = unpack('<BHxxxxxxI', bytes(values[0:14]))
-    temperature = temp_data[0] / 100.0
-    log.info(f'Temperature: {temperature} C')
-    print(f"Received temperature data: {temperature} C")
+    temp_data = unpack('<HBBBBBB', value)
+    log.info(f'Temperature: {temp_data[0] / 100.0} C')
 
-# Reading configuration file
-config = ConfigParser()
-config.read('MBP70.ini')
+def main():
+    config = ConfigParser()
+    config.read('MBP70.ini')
 
-# Set up logging
-log = logging.getLogger(__name__)
-log.setLevel(config.get('Program', 'loglevel').upper())
-fh = logging.FileHandler(config.get('Program', 'logfile'))
-fh.setLevel(config.get('Program', 'loglevel').upper())
-log.addHandler(fh)
+    numeric_level = getattr(logging, config.get('Program', 'loglevel').upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % loglevel)
+    
+    logging.basicConfig(level=numeric_level,
+                        format='%(asctime)s %(levelname)-8s %(funcName)s %(message)s',
+                        datefmt='%a, %d %b %Y %H:%M:%S',
+                        filename=config.get('Program', 'logfile'),
+                        filemode='w')
+    log = logging.getLogger(__name__)
 
-# Discovering device
-adapter = pygatt.backends.GATTToolBackend()
-adapter.start()
-log.info('Discovering device...')
-device = None
+    ble_address = config.get('TEMP', 'ble_address')
+    device_name = config.get('TEMP', 'device_name')
+    device_model = config.get('TEMP', 'device_model')
 
-while not device:
-    try:
-        device = adapter.connect(config.get('TEMP', 'ble_address'))
-        log.info('Device connected')
-    except Exception as e:
-        log.error(f'Error connecting to device: {e}')
-        time.sleep(5)
+    adapter = pygatt.backends.GATTToolBackend()
+    adapter.start()
 
-# Reading temperature data
-while True:
-    try:
-        device.subscribe(Char_temperature, callback=handle_temperature_data)
-        print("Subscribed to temperature data.")
-    except Exception as e:
-        log.error(f'Error reading temperature data: {e}')
-        device.disconnect()
-        time.sleep(5)
-        while not device:
-            try:
-                device = adapter.connect(config.get('TEMP', 'ble_address'))
-                log.info('Device reconnected')
-            except Exception as e:
-                log.error(f'Error reconnecting to device: {e}')
-                time.sleep(5)
+    while True:
+        try:
+            device = adapter.connect(ble_address)
+            device.subscribe(Char_temperature, callback=handle_temperature_data, indication=True)
+            time.sleep(30)  # Adjust the sleep time as needed
+            device.disconnect()
+        except pygatt.exceptions.NotConnectedError:
+            log.error("Device not connected")
+            time.sleep(5)  # Retry after a short delay
 
-# Disconnect and stop the adapter
-device.disconnect()
-adapter.stop()
+if __name__ == "__main__":
+    main()
