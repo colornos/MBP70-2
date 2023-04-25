@@ -29,7 +29,7 @@ class Plugin:
             temperature = temperature_data[0]["temperature"]
             headers = {"Content-type": "application/x-www-form-urlencoded"}
 
-            data = f"rfid={rfid}&one={temperature}&pin={pin}"
+            data = f"rfid={rfid}&one={temperature}"
             response = http.request("POST", "https://colornos.com/sensors/temperature.php", body=data, headers=headers)
             print(response.status, response.reason)
             print(response.data.decode())
