@@ -21,9 +21,9 @@ config.read('MBP70.ini')
 
 # Set up logging
 log = logging.getLogger(__name__)
-log.setLevel(config.get('Program', 'loglevel'))
+log.setLevel(config.get('Program', 'loglevel').upper())
 fh = logging.FileHandler(config.get('Program', 'logfile'))
-fh.setLevel(config.get('Program', 'loglevel'))
+fh.setLevel(config.get('Program', 'loglevel').upper())
 log.addHandler(fh)
 
 # Discovering device
