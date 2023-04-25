@@ -26,10 +26,7 @@ class Plugin:
         if (rfid == "0"):
             print("No card detected!")
         else:
-            temperature = temperature_data[0]["temperature"]
-            headers = {"Content-type": "application/x-www-form-urlencoded"}
-
-            data = f"rfid={rfid}&one={temperature}"
-            response = http.request("POST", "https://colornos.com/sensors/temperature.php", body=data, headers=headers)
-            print(response.status, response.reason)
-            print(response.data.decode())
+            temperature = temperature_data[0]['temperature']
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "one": temperature})
+            print(r.data)
+            log.info('Finished plugin: ' + __name__)
