@@ -200,7 +200,7 @@ while True:
                     
                 # Run all plugins found
                 for plugin in plugins.values():
-                        plugin.execute(config, temperaturedatasorted)
+                        plugin.execute(config, temperaturedatasorted, log)
                 else:
                     log.error('Data received')
                   
