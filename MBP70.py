@@ -12,7 +12,7 @@ import os
 Char_temperature = '00002A1C-0000-1000-8000-00805f9b34fb'  # temperature data
 
 def handle_temperature_data(handle, value):
-    temp_data = unpack('<HBBBBBB', value)
+    temp_data = unpack('<BHxxxxxxI', bytes(values[0:14]))
     log.info(f'Temperature: {temp_data[0] / 100.0} C')
 
 def main():
