@@ -13,7 +13,9 @@ Char_temperature = '00002A1C-0000-1000-8000-00805f9b34fb'  # temperature data
 
 def handle_temperature_data(handle, value):
     temp_data = unpack('<HBBBBBB', value)
-    log.info(f'Temperature: {temp_data[0] / 100.0} C')
+    temperature = temp_data[0] / 100.0
+    log.info(f'Temperature: {temperature} C')
+    print(f"Received temperature data: {temperature} C")
 
 # Reading configuration file
 config = ConfigParser()
@@ -44,7 +46,7 @@ while not device:
 while True:
     try:
         device.subscribe(Char_temperature, callback=handle_temperature_data)
-        time.sleep(60)
+        print("Subscribed to temperature data.")
     except Exception as e:
         log.error(f'Error reading temperature data: {e}')
         device.disconnect()
