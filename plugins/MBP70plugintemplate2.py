@@ -28,5 +28,5 @@ class Plugin:
         else:
             temperature = temperature_data[0]['temperature']
             r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "one": temperature})
-            print(r.data)
+            print(r.data.decode('utf-8'))
             log.info('Finished plugin: ' + __name__)
