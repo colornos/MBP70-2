@@ -11,11 +11,15 @@ import os
 # Interesting characteristics
 Char_temperature = '00002A1C-0000-1000-8000-00805f9b34fb'  # temperature data
 
+log = None
+
 def handle_temperature_data(handle, value):
-    temp_data = unpack('<BHxxxxxxI', bytes(values[0:14]))
+    temp_data = unpack('<BHxxxxxxI', bytes(value[0:14]))
     log.info(f'Temperature: {temp_data[0] / 100.0} C')
 
 def main():
+    global log
+
     config = ConfigParser()
     config.read('MBP70.ini')
 
