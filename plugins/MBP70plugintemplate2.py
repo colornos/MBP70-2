@@ -14,7 +14,7 @@ class Plugin:
     def __init__(self):
         self.name = "MBP70plugintemplate2"
 
-    def execute(self, config, temperature_data):
+    def execute(self, config, temperature_data, log):
 
         def read_from_file(filename):
             with open(filename, "r") as file:
