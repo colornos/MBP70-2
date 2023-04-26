@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 import sys
 import logging
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import os
 import thread
 import urllib3
