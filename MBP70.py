@@ -8,6 +8,7 @@ import subprocess
 from struct import *
 from binascii import hexlify
 import os
+import threading
 
 # Interesting characteristics
 Char_temperature = '00002A1C-0000-1000-8000-00805f9b34fb'  # temperature data
