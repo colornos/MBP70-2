@@ -4,7 +4,7 @@ import sys
 import logging
 from configparser import SafeConfigParser
 import os
-import thread
+import threading
 import urllib3
 http = urllib3.PoolManager()
 
