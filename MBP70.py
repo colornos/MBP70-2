@@ -2,7 +2,7 @@ from __future__ import print_function
 import sys
 import pygatt.backends
 import logging
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import time
 import subprocess
 from struct import *
@@ -101,7 +101,7 @@ def init_ble_mode():
 Main program loop
 '''
 
-config = SafeConfigParser()
+config = ConfigParser()
 config.read('MBP70.ini')
 path = "plugins/"
 plugins = {}
