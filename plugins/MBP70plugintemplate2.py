@@ -58,6 +58,7 @@ class Plugin:
 
         else:
             temperature = temperaturedata[0]['temperature']
-            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"byte1":byte1, "byte2":byte2, "byte3":byte3, "byte4":byte4, "one":temperature, "pin":pin})
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"byte1":byte1, "byte2":byte2, "byte3":byte3, "byte4":byte4, "one":temperature, "pin":pin}, headers=headers)
             print(r.data)
             log.info('Finished plugin: ' + __name__)
