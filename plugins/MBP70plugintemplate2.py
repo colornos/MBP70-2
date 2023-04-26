@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 import sys
 import logging
-from configparser import ConfigParser
+from configparser import SafeConfigParser
 import os
 import thread
 import urllib3
@@ -20,7 +20,7 @@ class Plugin:
         log.info('Starting plugin: ' + __name__)
         # read ini file from same location as plugin resides, named [pluginname].ini
         configfile = os.path.dirname(os.path.realpath(__file__)) + '/' + __name__ + '.ini'
-        pluginconfig = ConfigParser()
+        pluginconfig = SafeConfigParser()
         pluginconfig.read(configfile)
         log.info('ini read from: ' + configfile)
         
@@ -54,7 +54,7 @@ class Plugin:
         pin = str(contents5)
 
         if (byte1 == 0) and (byte2 == 0) and (byte3 == 0) and (byte4 == 0):
-            print "No card detected!"
+            print("No card detected!")
 
         else:
             temperature = temperaturedata[0]['temperature']
