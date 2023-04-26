@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 import sys
 import logging
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import os
 import thread
 import urllib3
@@ -20,7 +20,7 @@ class Plugin:
         log.info('Starting plugin: ' + __name__)
         # read ini file from same location as plugin resides, named [pluginname].ini
         configfile = os.path.dirname(os.path.realpath(__file__)) + '/' + __name__ + '.ini'
-        pluginconfig = SafeConfigParser()
+        pluginconfig = ConfigParser()
         pluginconfig.read(configfile)
         log.info('ini read from: ' + configfile)
         
