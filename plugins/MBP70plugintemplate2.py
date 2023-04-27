@@ -23,42 +23,18 @@ class Plugin:
         pluginconfig = ConfigParser()
         pluginconfig.read(configfile)
         log.info('ini read from: ' + configfile)
-        
         # --- start plugin specifics here
-
         device = '104019001'
-        f1 = open("one.txt", "r")
+        f1 = open("rfid.txt", "r")
         if f1.mode == 'r':
             contents1 = f1.read()
-
-        f2 = open("two.txt", "r")
-        if f2.mode == 'r':
-            contents2 = f2.read()
-
-        f3 = open("three.txt", "r")
-        if f3.mode == 'r':
-            contents3 = f3.read()
-
-        f4 = open("four.txt", "r")
-        if f4.mode == 'r':
-            contents4 = f4.read()
-
-        f5 = open("pin.txt", "r")
-        if f5.mode == 'r':
-            contents5 = f5.read()
-
-        byte1 = str(contents1)
-        byte2 = str(contents2)
-        byte3 = str(contents3)
-        byte4 = str(contents4)
-        pin = str(contents5)
-
-        if (byte1 == 0) and (byte2 == 0) and (byte3 == 0) and (byte4 == 0):
+        rfid = str(contents1)
+        if (rfid == 0):
             print("No card detected!")
 
         else:
             temperature = temperaturedata[0]['temperature']
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
-            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"byte1":byte1, "byte2":byte2, "byte3":byte3, "byte4":byte4, "one":temperature, "pin":pin}, headers=headers)
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid":rfid, "one":temperature}, headers=headers)
             print(r.data)
             log.info('Finished plugin: ' + __name__)
