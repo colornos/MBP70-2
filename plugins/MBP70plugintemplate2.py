@@ -6,6 +6,7 @@ from configparser import ConfigParser
 import os
 import threading
 import urllib3
+import urllib.parse
 
 http = urllib3.PoolManager()
 
@@ -47,6 +48,8 @@ class Plugin:
                 'User-Agent': 'RaspberryPi/MBP70.py',
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
-            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "pin": pin, "one": temperature}, headers=headers)
+            form_data = {'rfid': rfid, 'pin': pin, 'one': temperature}
+            encoded_data = urllib.parse.urlencode(form_data)
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', body=encoded_data, headers=headers)
             print(r.data)
             log.info('Finished plugin: ' + __name__)
