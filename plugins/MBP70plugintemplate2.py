@@ -28,13 +28,20 @@ class Plugin:
         f1 = open("rfid.txt", "r")
         if f1.mode == 'r':
             contents1 = f1.read()
-        rfid = str(contents1)
+        
+	    f2=open("pin.txt", "r")
+        if f2.mode == 'r':
+            contents2 = f2.read()
+            
+ 	    rfid = str(contents1)
+	    pin = str(contents2)
+        
         if (rfid == 0):
             print("No card detected!")
 
         else:
             temperature = temperaturedata[0]['temperature']
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
-            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid":rfid, "one":temperature}, headers=headers)
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid":rfid, "pin":pin, "one":temperature}, headers=headers)
             print(r.data)
             log.info('Finished plugin: ' + __name__)
