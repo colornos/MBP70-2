@@ -43,7 +43,7 @@ class Plugin:
 
         else:
             temperature = temperaturedata[0]['temperature']
-            headers = {'User-Agent': 'RaspberryPi/MBP70.py'}
+            headers = {'User-Agent': 'RaspberryPi/MyScriptName','Content-Type': 'application/x-www-form-urlencoded'}
             r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "pin": pin, "one": temperature}, headers=headers)
             print(r.data)
             log.info('Finished plugin: ' + __name__)
