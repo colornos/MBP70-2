@@ -6,42 +6,44 @@ from configparser import ConfigParser
 import os
 import threading
 import urllib3
+
 http = urllib3.PoolManager()
+
 
 class Plugin:
 
-def __init__(self):
-    return
+    def __init__(self):
+        return
 
-def execute(self, config, temperaturedata):
-    # self.temperaturedata = temperaturedata
-    # --- part of plugin skeleton
-    log = logging.getLogger(__name__)
-    log.info('Starting plugin: ' + __name__)
-    # read ini file from same location as plugin resides, named [pluginname].ini
-    configfile = os.path.dirname(os.path.realpath(__file__)) + '/' + __name__ + '.ini'
-    pluginconfig = ConfigParser()
-    pluginconfig.read(configfile)
-    log.info('ini read from: ' + configfile)
-    # --- start plugin specifics here
-    device = '104019001'
-    f1 = open("rfid.txt", "r")
-    if f1.mode == 'r':
-        contents1 = f1.read()
+    def execute(self, config, temperaturedata):
+        # self.temperaturedata = temperaturedata
+        # --- part of plugin skeleton
+        log = logging.getLogger(__name__)
+        log.info('Starting plugin: ' + __name__)
+        # read ini file from same location as plugin resides, named [pluginname].ini
+        configfile = os.path.dirname(os.path.realpath(__file__)) + '/' + __name__ + '.ini'
+        pluginconfig = ConfigParser()
+        pluginconfig.read(configfile)
+        log.info('ini read from: ' + configfile)
+        # --- start plugin specifics here
+        device = '104019001'
+        f1 = open("rfid.txt", "r")
+        if f1.mode == 'r':
+            contents1 = f1.read()
 
-    f2 = open("pin.txt", "r")
-    if f2.mode == 'r':
-        contents2 = f2.read()
+        f2 = open("pin.txt", "r")
+        if f2.mode == 'r':
+            contents2 = f2.read()
 
-    rfid = str(contents1)
-    pin = str(contents2)
+        rfid = str(contents1)
+        pin = str(contents2)
 
-    if rfid == '0':
-        print("No card detected!")
+        if rfid == '0':
+            print("No card detected!")
 
-    else:
-        temperature = temperaturedata[0]['temperature']
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
-        r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "pin": pin, "one": temperature}, headers=headers)
-        print(r.data)
-        log.info('Finished plugin: ' + __name__)
+        else:
+            temperature = temperaturedata[0]['temperature']
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
+            r = http.request('POST', 'https://colornos.com/sensors/temperature.php', fields={"rfid": rfid, "pin": pin, "one": temperature}, headers=headers)
+            print(r.data)
+            log.info('Finished plugin: ' + __name__)
